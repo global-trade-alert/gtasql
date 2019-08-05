@@ -23,7 +23,7 @@ gta_sql_pool_open <- function(db.title=NULL,
   
   if(is.null(db.title)){
     
-    pool <<- dbPool(
+    pool <<- pool::dbPool(
       drv = RMySQL::MySQL(),
       dbname = 'ricardodev',
       host = "gta-rstudio-dev.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
@@ -37,7 +37,7 @@ gta_sql_pool_open <- function(db.title=NULL,
     
     if(db.title=="ricardo"){
       
-      pool <<- dbPool(
+      pool <<- pool::dbPool(
         drv = RMySQL::MySQL(),
         dbname = 'ricardo',
         host = "gta-ricardo.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
@@ -49,7 +49,7 @@ gta_sql_pool_open <- function(db.title=NULL,
     
     if(is.null(db.name)){
       
-      pool <<- dbPool(
+      pool <<- pool::dbPool(
         drv = RMySQL::MySQL(),
         host = db.host,
         username = db.user,
@@ -58,7 +58,7 @@ gta_sql_pool_open <- function(db.title=NULL,
 
     } else {
       
-      pool <<- dbPool(
+      pool <<- pool::dbPool(
         drv = RMySQL::MySQL(),
         host = db.host,
         username = db.user,
