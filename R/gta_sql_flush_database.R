@@ -24,6 +24,9 @@ gta_sql_flush_database <- function(db.connection="pool",
          conn.update=pool::poolCheckout(pool)
          RMySQL::dbSendQuery(conn.update, paste("DROP DATABASE", db.name))
          pool::poolReturn(conn.update)
+         
+         print("The database is empty now.")
+         
        } else {
          print("Flushing aborted because of name difference.")
        }
