@@ -65,7 +65,7 @@ gta_sql_load_table <- function(load.table=NULL,
     change.cols=unique(column.type$column_name[grepl("logical", column.type$column_type, ignore.case = T)])
     
     for(change.it in change.cols){
-      eval(parse(text=paste("sql.data$",change.it,"=sql.data$",change.it,"==0",sep="")))
+      eval(parse(text=paste("sql.data$",change.it,"=sql.data$",change.it,"==1",sep="")))
     }
     rm(change.cols, change.it)
   }
