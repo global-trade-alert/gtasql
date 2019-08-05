@@ -9,7 +9,7 @@
 #' @author Global Trade Alert
 
 gta_sql_library_update = function(x){
-  devtools::install_github("global-trade-alert/gtasql", force=T)
+  devtools::install_github("global-trade-alert/gtasql@origin", force=T)
   library("gtasql")
   
   print("You are up to date.")
