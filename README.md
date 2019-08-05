@@ -4,6 +4,6 @@ A nascent R package containing functions to work with Global Trade Alert data in
 
 Install using:
 ```
-devtools::install_github("global-trade-alert/gtasql")
+devtools::install_github("global-trade-alert/gtasql@origin")
 ```
 We are working continuously on bugfixes and extensions, so update this regularly ("gta_sql_update()").
