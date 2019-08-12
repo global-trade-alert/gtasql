@@ -9,12 +9,13 @@
 #' 
 
 gta_sql_set_table_keys <- function(table.name=NULL,
-                                      primary.key=NULL,
-                                      primary.auto.incr=F,
-                                      foreign.key=NULL,
-                                      foreign.key.parent=NULL,
-                                      foreign.key.del.cascade=T,
-                                      db.connection="pool") {
+                                   primary.key=NULL,
+                                   primary.auto.incr=F,
+                                   foreign.key=NULL,
+                                   foreign.key.parent=NULL,
+                                   foreign.key.del.cascade=T,
+                                   db.connection="pool",
+                                   table.prefix=NULL) {
   
 
   
@@ -34,7 +35,8 @@ gta_sql_set_table_keys <- function(table.name=NULL,
   if(is.null(table.name)){
     stop("Please specify a table.")
   } else {
-    table.name=gta_r_to_sql_var(table.name)
+    table.name=gta_r_to_sql_var(table.name,
+                                table.prefix=table.prefix)
     
     alter.table=paste("ALTER TABLE ", table.name,sep="")
   }
@@ -42,7 +44,8 @@ gta_sql_set_table_keys <- function(table.name=NULL,
  
     ## primary key
   if(is.null(primary.key)==F){
-    primary.key=gta_r_to_sql_var(primary.key)
+    primary.key=gta_r_to_sql_var(primary.key,
+                                 table.prefix="")
     
     
     primary.part=paste(paste(" CHANGE COLUMN",
@@ -82,14 +85,16 @@ gta_sql_set_table_keys <- function(table.name=NULL,
       gta_sql_keytype_record(record.frame=table.name,
                              record.column=primary.key,
                              record.type="primary",
-                             record.style="auto")
+                             record.style="auto",
+                             table.prefix=table.prefix)
       
     } else {
       
       gta_sql_keytype_record(record.frame=table.name,
                              record.column=primary.key,
                              record.type="primary",
-                             record.style="none")
+                             record.style="none",
+                             table.prefix=table.prefix)
     } 
 
   }
@@ -97,8 +102,10 @@ gta_sql_set_table_keys <- function(table.name=NULL,
   
   ## foreign key
   if(is.null(foreign.key)==F){
-    foreign.key=gta_r_to_sql_var(foreign.key)
-    foreign.key.parent=gta_r_to_sql_var(foreign.key.parent)
+    foreign.key=gta_r_to_sql_var(foreign.key,
+                                 table.prefix="")
+    foreign.key.parent=gta_r_to_sql_var(foreign.key.parent,
+                                        table.prefix="")
     
     for(i in 1:length(foreign.key)){
       
@@ -125,7 +132,8 @@ gta_sql_set_table_keys <- function(table.name=NULL,
       gta_sql_keytype_record(record.frame=table.name,
                              record.column=foreign.key[i],
                              record.type="foreign",
-                             record.style="none")
+                             record.style="none",
+                             table.prefix=table.prefix)
       
     }
 
