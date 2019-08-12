@@ -15,6 +15,7 @@
 gta_sql_append_table <- function(append.table=NULL,
                                  append.by.df=NULL,
                                  table.prefix=NULL,
+                                 get.id=NULL,
                                  db.connection="pool") {
   
   ## importing what you want to send
@@ -28,8 +29,14 @@ gta_sql_append_table <- function(append.table=NULL,
   
   ## checking whether there is an auto-incrementing primary key in the table
   if(db.connection=="pool"){
-    
-    if(is.null(table.prefix)){
+    append.a.table=poolCheckout(pool)
+
+  } else {
+    append.a.table=db.connection
+  }
+  
+  
+  if(is.null(table.prefix)){
       
       key.table=paste(session.prefix,"r_key_type",sep="")
       
@@ -44,10 +51,8 @@ gta_sql_append_table <- function(append.table=NULL,
     }
     
     
-    key.type <- dbGetQuery(pool, paste("SELECT * FROM ",key.table," WHERE data_frame='",sql.table,"';", sep=""))
-  } else {
-    stop("get the connection written up in source code")
-  }
+  key.type <- dbGetQuery(append.a.table, paste("SELECT * FROM ",key.table," WHERE data_frame='",sql.table,"';", sep=""))
+   
   
   
   ## if so, remove those columns
@@ -57,16 +62,33 @@ gta_sql_append_table <- function(append.table=NULL,
     for(remove.it in remove.cols){
       eval(parse(text=paste("sql.df$",remove.it,"=NULL",sep="")))
     }
+   
     
   } 
+
+  dbWriteTable(conn = append.a.table, name = sql.table, value = sql.df, row.names=F, append=T)
+
+  if(!is.null(get.id)){
+    
+    
+    query <- paste("SELECT MAX(",gsub("\\.","_",get.id),") FROM ",sql.table,";",sep="")
+    
+    sought.value=dbGetQuery(append.a.table, query)
+    
+    if(nrow(sought.value)==1 & ncol(sought.value)==1){
+      return(sought.value[1,1])
+    } else {
+      names(sought.value)=gsub("_","\\.",names(sought.value))
+      return(sought.value)
+    }
+    
+    
+    
+  }
   
   if(db.connection=="pool"){
-    dbWriteTable(conn = pool, name = sql.table, value = sql.df, row.names=F, append=T)
-  } else {
-    stop("get the connection written up in source code")
-  }
- 
-
-
+    
+    poolReturn(append.a.table)
+  } 
 }
 
