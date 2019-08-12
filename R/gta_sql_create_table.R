@@ -15,14 +15,14 @@
 #' @author Global Trade Alert
 
 gta_sql_create_table <- function(write.df=NULL,
-                                    create.primary.key=NULL,
-                                    create.primary.auto.incr=F,
-                                    create.foreign.key=NULL,
-                                    create.foreign.key.parent=NULL,
-                                    create.foreign.key.del.cascade=T,
-                                    append.existing=T,
-                                    db.connection="pool",
-                                    prefix="ric_") {
+                                 create.primary.key=NULL,
+                                 create.primary.auto.incr=F,
+                                 create.foreign.key=NULL,
+                                 create.foreign.key.parent=NULL,
+                                 create.foreign.key.del.cascade=T,
+                                 append.existing=T,
+                                 db.connection="pool",
+                                 prefix="ric_") {
   
   if(is.null(write.df)){
     stop("No data frame provided for 'write.df'.")
@@ -38,11 +38,11 @@ gta_sql_create_table <- function(write.df=NULL,
   
   eval(parse(text=paste("sql.df=",write.df,sep="")))
   names(sql.df)=gsub('\\.','_',names(sql.df))
-  sql.name=gsub("\\.","_",write.df)
+  sql.name=paste0(prefix, gsub("\\.","_",write.df))
   sql.df=as.data.frame(sql.df)
   
   if(db.connection=="pool"){
-    dbWriteTable(conn = pool, name = paste0(prefix,sql.name), value = sql.df, row.names=F, append=append.existing)
+    dbWriteTable(conn = pool, name = sql.name, value = sql.df, row.names=F, append=append.existing)
   } else {
     stop("get the connection written up in source code")
   }
@@ -55,20 +55,20 @@ gta_sql_create_table <- function(write.df=NULL,
     dbSendQuery(db.keys,paste("TRUNCATE TABLE ",sql.name, sep=""))
     
     gta_sql_set_table_keys(table.name=sql.name,
-                              primary.key=create.primary.key,
-                              primary.auto.incr=create.primary.auto.incr,
-                              foreign.key=create.foreign.key,
-                              foreign.key.parent=create.foreign.key.parent,
-                              foreign.key.del.cascade=create.foreign.key.del.cascade,
-                              db.connection="db.keys")
+                           primary.key=create.primary.key,
+                           primary.auto.incr=create.primary.auto.incr,
+                           foreign.key=create.foreign.key,
+                           foreign.key.parent=create.foreign.key.parent,
+                           foreign.key.del.cascade=create.foreign.key.del.cascade,
+                           db.connection="db.keys")
     
     gta_sql_create_table(write.df=write.df, append.existing=T,
-                            create.primary.key=NULL,
-                            create.foreign.key=NULL)
+                         create.primary.key=NULL,
+                         create.foreign.key=NULL)
     poolReturn(db.keys)
     
   }
-
-
+  
+  
 }
 
