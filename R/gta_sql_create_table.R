@@ -21,10 +21,19 @@ gta_sql_create_table <- function(write.df=NULL,
                                     create.foreign.key.parent=NULL,
                                     create.foreign.key.del.cascade=T,
                                     append.existing=T,
-                                    db.connection="pool") {
+                                    db.connection="pool",
+                                    prefix="ric_") {
   
   if(is.null(write.df)){
     stop("No data frame provided for 'write.df'.")
+  }
+  
+  if(is.null(prefix)){
+    stop("Please specify a prefix for this table")
+  }
+  
+  if(prefix==""){
+    stop("Please specify a prefix for this table")
   }
   
   eval(parse(text=paste("sql.df=",write.df,sep="")))
@@ -33,7 +42,7 @@ gta_sql_create_table <- function(write.df=NULL,
   sql.df=as.data.frame(sql.df)
   
   if(db.connection=="pool"){
-    dbWriteTable(conn = pool, name = sql.name, value = sql.df, row.names=F, append=append.existing)
+    dbWriteTable(conn = pool, name = paste0(prefix,sql.name), value = sql.df, row.names=F, append=append.existing)
   } else {
     stop("get the connection written up in source code")
   }
