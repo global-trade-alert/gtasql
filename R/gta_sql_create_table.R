@@ -22,24 +22,21 @@ gta_sql_create_table <- function(write.df=NULL,
                                  create.foreign.key.del.cascade=T,
                                  append.existing=T,
                                  db.connection="pool",
-                                 prefix="ric_") {
+                                 table.prefix=NULL) {
   
   if(is.null(write.df)){
     stop("No data frame provided for 'write.df'.")
   }
   
-  if(is.null(prefix)){
-    stop("Please specify a prefix for this table")
-  }
-  
-  if(prefix==""){
-    stop("Please specify a prefix for this table")
-  }
   
   eval(parse(text=paste("sql.df=",write.df,sep="")))
   names(sql.df)=gsub('\\.','_',names(sql.df))
-  sql.name=paste0(prefix, gsub("\\.","_",write.df))
   sql.df=as.data.frame(sql.df)
+  
+  
+  sql.name=gta_r_to_sql_var(convert.var=write.df,
+                            table.prefix=table.prefix)
+  
   
   if(db.connection=="pool"){
     dbWriteTable(conn = pool, name = sql.name, value = sql.df, row.names=F, append=append.existing)

@@ -9,15 +9,32 @@
 #' @references www.globaltradealert.org
 #' @author Global Trade Alert
 
-gta_r_to_sql_df <- function(convert.df=NULL) {
+gta_r_to_sql_df <- function(convert.df=NULL,
+                            table.prefix=NULL) {
   
   if(is.null(convert.df)){
     stop("No data frame provided for 'convert.df'.")
   }
   
   eval(parse(text=paste("names(convert.df)=gsub('\\.','_',names(convert.df))",sep="")))
-  eval(parse(text=paste(gsub("\\.","_",convert.df),"=convert.df",sep="")))
   
-  return(eval(parse(text=paste(gsub("\\.","_",convert.df),sep=""))))
+  if(is.null(table.prefix)){
+    
+    eval(parse(text=paste(paste(session.prefix,gsub("\\.","_",convert.df),sep=""),"=convert.df",sep="")))
+    
+    return(eval(parse(text=paste(paste(session.prefix,gsub("\\.","_",convert.df),sep=""),sep=""))))
+    
+  } else {
+    
+    if(nchar(table.prefix)>0 & stringr::str_detect(table.prefix, "_$", negate=T)){
+      stop("The table.prefix has to end with an underscore '_'.")
+    }
+   
+    eval(parse(text=paste(paste(table.prefix,gsub("\\.","_",convert.df),sep=""),"=convert.df",sep="")))
+    
+    return(eval(parse(text=paste(paste(table.prefix,gsub("\\.","_",convert.df),sep=""),sep=""))))
+     
+  }
+  
 }
 

@@ -10,6 +10,7 @@
 #' @param db.user connection info.
 #' @param db.password connection info.
 #' @param db.host connection info.
+#' @param table.prefix Specify the default SQL table prefix for this session. Can be empty (''). All non-empty values have to end in an underscore ('_').
 #'
 #' @references www.globaltradealert.org
 #' @author Global Trade Alert
@@ -19,7 +20,24 @@ gta_sql_pool_open <- function(db.title=NULL,
                               db.name=NULL,
                               db.user=NULL,
                               db.password=NULL,
-                              db.host=NULL) {
+                              db.host=NULL,
+                              table.prefix=NULL) {
+  
+  if(is.null(table.prefix)){
+    stop("Please set the default table.prefix for this session (e.g. 'hs_').")
+  } else {
+    
+    if(nchar(table.prefix)>0 & stringr::str_detect(table.prefix, "_$", negate=T)){
+      
+      stop("The table.prefix has to end with an underscore '_'.")
+      
+    } else {
+      
+      assign("session.prefix",table.prefix, envir=.GlobalEnv)
+    }
+    
+  }
+  
   
   if(is.null(db.title)){
     

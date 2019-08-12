@@ -9,6 +9,7 @@
 #' @author Global Trade Alert
 
 gta_sql_load_table <- function(load.table=NULL,
+                               table.prefix=NULL,
                                db.connection="pool") {
   
   
@@ -17,7 +18,9 @@ gta_sql_load_table <- function(load.table=NULL,
   }
   
   ## adjusting the table name
-  sql.table=gsub("\\.","_",load.table)
+  
+  sql.table=gta_r_to_sql_var(convert.var=load.table,
+                             table.prefix=table.prefix)
   
   # Construct the fetching query
   sql <- paste("SELECT * FROM", sql.table)
@@ -30,7 +33,22 @@ gta_sql_load_table <- function(load.table=NULL,
 
   ## loading table
   if(db.connection=="pool"){
-    column.type <- dbGetQuery(pool, paste("SELECT * FROM r_column_type WHERE data_frame='",sql.table,"';", sep=""))
+    
+    if(is.null(table.prefix)){
+      
+      col.table=paste(session.prefix,"r_column_type",sep="")
+      
+    } else{
+      
+      if(nchar(table.prefix)>0 & stringr::str_detect(table.prefix, "_$", negate=T)){
+        stop("The table.prefix has to end with an underscore '_'.")
+      }
+      
+      col.table=paste(table.prefix,"r_column_type",sep="")
+      
+    }
+    
+    column.type <- dbGetQuery(pool, paste("SELECT * FROM ",col.table," WHERE data_frame='",sql.table,"';", sep=""))
     sql.data <- dbGetQuery(pool, query)
   } else {
     stop("get the connection written up in source code")

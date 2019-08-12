@@ -8,15 +8,32 @@
 #' @author Global Trade Alert
 #' 
 
-gta_sql_keytype_initialise <- function(db.connection="pool") {
+gta_sql_keytype_initialise <- function(db.connection="pool",
+                                       table.prefix=NULL) {
   
+  
+  if(is.null(table.prefix)){
+    
+    key.table=paste(session.prefix,"r_key_type",sep="")
+    
+  } else{
+    
+    if(nchar(table.prefix)>0 & stringr::str_detect(table.prefix, "_$", negate=T)){
+      stop("The table.prefix has to end with an underscore '_'.")
+    }
+    
+    key.table=paste(table.prefix,"r_key_type",sep="")
+    
+  }
+ 
   # Construct the fetching query
-  init.query="CREATE TABLE r_key_type (
-    data_frame text,
-    column_name text,
-    key_type text,
-    increment_style text
-);"
+  init.query=paste("CREATE TABLE ",key.table," (
+                   data_frame text,
+                   column_name text,
+                   key_type text,
+                   increment_style text
+  );",sep="")
+  
   
   ## loading table
   if(db.connection=="pool"){

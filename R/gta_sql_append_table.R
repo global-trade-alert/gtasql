@@ -14,19 +14,37 @@
 
 gta_sql_append_table <- function(append.table=NULL,
                                  append.by.df=NULL,
+                                 table.prefix=NULL,
                                  db.connection="pool") {
   
   ## importing what you want to send
   eval(parse(text=paste("sql.df=",append.by.df,sep="")))
   names(sql.df)=gsub('\\.','_',names(sql.df))
-  
-  sql.table=gsub("\\.","_",append.table)
   sql.df=as.data.frame(sql.df)
+  
+  sql.table=gta_r_to_sql_var(convert.var=append.table,
+                             table.prefix=table.prefix)
   
   
   ## checking whether there is an auto-incrementing primary key in the table
   if(db.connection=="pool"){
-    key.type <- dbGetQuery(pool, paste("SELECT * FROM r_key_type WHERE data_frame='",sql.table,"';", sep=""))
+    
+    if(is.null(table.prefix)){
+      
+      key.table=paste(session.prefix,"r_key_type",sep="")
+      
+    } else{
+      
+      if(nchar(table.prefix)>0 & stringr::str_detect(table.prefix, "_$", negate=T)){
+        stop("The table.prefix has to end with an underscore '_'.")
+      }
+      
+      key.table=paste(table.prefix,"r_key_type",sep="")
+      
+    }
+    
+    
+    key.type <- dbGetQuery(pool, paste("SELECT * FROM ",key.table," WHERE data_frame='",sql.table,"';", sep=""))
   } else {
     stop("get the connection written up in source code")
   }

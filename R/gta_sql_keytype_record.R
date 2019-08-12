@@ -15,21 +15,34 @@ gta_sql_keytype_record <- function(record.frame=NULL,
                                    record.column=NULL,
                                    record.type=NULL,
                                    record.style=NULL,
-                                   db.connection="pool") {
+                                   db.connection="pool",
+                                   table.prefix=NULL) {
   
   sql.df=gsub("\\.","_", record.frame)
   sql.col=gsub("\\.","_", record.column)
   
+  if(is.null(table.prefix)){
+    
+    key.table=paste(session.prefix,"r_key_type",sep="")
+    
+  } else{
+    
+    if(nchar(table.prefix)>0 & stringr::str_detect(table.prefix, "_$", negate=T)){
+      stop("The table.prefix has to end with an underscore '_'.")
+    }
+    
+    key.table=paste(table.prefix,"r_key_type",sep="")
+    
+  }
   
-  del.query=paste("DELETE FROM r_key_type WHERE data_frame='",sql.df,"' and column_name='",sql.col,"';",sep="")  
-  
-  ## loading table
+  del.query=paste("DELETE FROM ",key.table," WHERE data_frame='",sql.df,"' and column_name='",sql.col,"';",sep="")  
+    ## loading table
   if(db.connection=="pool"){
     db.keytype <<- poolCheckout(pool)
     dbSendQuery(db.keytype,del.query)
     
     dbWriteTable(conn = db.keytype,
-                 name = "r_key_type", 
+                 name = key.table, 
                  value = data.frame(data_frame=sql.df,
                                     column_name=sql.col,
                                     key_type=record.type,
