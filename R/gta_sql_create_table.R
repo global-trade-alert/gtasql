@@ -51,13 +51,14 @@ gta_sql_create_table <- function(write.df=NULL,
     db.keys <<- poolCheckout(pool)
     dbSendQuery(db.keys,paste("TRUNCATE TABLE ",sql.name, sep=""))
     
-    gta_sql_set_table_keys(table.name=sql.name,
+    gta_sql_set_table_keys(table.name=write.df,
                            primary.key=create.primary.key,
                            primary.auto.incr=create.primary.auto.incr,
                            foreign.key=create.foreign.key,
                            foreign.key.parent=create.foreign.key.parent,
                            foreign.key.del.cascade=create.foreign.key.del.cascade,
-                           db.connection="db.keys")
+                           db.connection="db.keys",
+                           table.prefix=table.prefix)
     
     gta_sql_create_table(write.df=write.df, append.existing=T,
                          create.primary.key=NULL,
