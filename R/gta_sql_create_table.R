@@ -46,7 +46,28 @@ gta_sql_create_table <- function(write.df=NULL,
     stop("get the connection written up in source code")
   }
   
+  ## column types: Storing
   gta_sql_coltype_record(write.df)
+  
+  
+  ## Setting char to dates on SQL
+  
+  col.types=sapply(sql.df, class)
+  got.dates<-subset(data.frame(column.name=gsub("\\.","_",names(col.types)),
+                               column.type=as.character(lapply(col.types, function(x)x[[1]]))),
+                    column.type=="Date")
+  if(nrow(got.dates)>0){
+    
+    for(date.column in got.dates$column.name){
+      
+      query=paste("ALTER TABLE `",sql.name,"` CHANGE COLUMN `",date.column,"` `",date.column,"` DATE NULL DEFAULT NULL",sep="")
+      gta_sql_update_table(query)
+    }
+    
+    
+  }
+  
+  
   
   if((is.null(create.primary.key)==F | is.null(create.foreign.key)==F)){
     
