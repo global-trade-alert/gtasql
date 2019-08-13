@@ -20,7 +20,6 @@ gta_sql_set_table_keys <- function(table.name=NULL,
   
 
   
-  ## opening a connection
   if(db.connection=="pool"){
     eval(parse(text=paste("conn=poolCheckout(",db.connection,")",sep="")))
   } else {
@@ -31,7 +30,7 @@ gta_sql_set_table_keys <- function(table.name=NULL,
   # ALTER TABLE Orders
   # ADD PRIMARY KEY (OrderID)
   # ADD FOREIGN KEY (PersonID) REFERENCES Persons(PersonID);
-
+  
   ## alter table
   if(is.null(table.name)){
     stop("Please specify a table.")
@@ -42,22 +41,22 @@ gta_sql_set_table_keys <- function(table.name=NULL,
     alter.table=paste("ALTER TABLE ", table.name,sep="")
   }
   
- 
-    ## primary key
+  
+  ## primary key
   if(is.null(primary.key)==F){
     primary.key=gta_r_to_sql_var(primary.key,
                                  table.prefix="")
     
     
     primary.part=paste(paste(" CHANGE COLUMN",
-                      primary.key,
-                      primary.key,
-                      "INT,",
-                      sep=" "),
-                      paste(" ADD PRIMARY KEY (", 
-                      paste(primary.key, collapse=", "),
-                      ")",
-                      sep=""), collapse="")
+                             primary.key,
+                             primary.key,
+                             "INT,",
+                             sep=" "),
+                       paste(" ADD PRIMARY KEY (", 
+                             paste(primary.key, collapse=", "),
+                             ")",
+                             sep=""), collapse="")
     
     query=paste(paste(alter.table, primary.part, sep=""), sep="; ")
     dbSendQuery(conn,query)
@@ -97,9 +96,9 @@ gta_sql_set_table_keys <- function(table.name=NULL,
                              record.style="none",
                              table.prefix=table.prefix)
     } 
-
+    
   }
-      
+  
   
   ## foreign key
   if(is.null(foreign.key)==F){
@@ -107,11 +106,11 @@ gta_sql_set_table_keys <- function(table.name=NULL,
                                  table.prefix="")
     
     foreign.key.parent.table=gta_r_to_sql_var(foreign.key.parent.table,
-                                        table.prefix="")
+                                              table.prefix=NULL)
     
     if(!is.null(foreign.key.parent.name)){
       foreign.key.parent.name=gta_r_to_sql_var(foreign.key.parent.name,
-                                   table.prefix="")
+                                               table.prefix="")
       
       fk.source=foreign.key.parent.name
     } else {
@@ -147,16 +146,16 @@ gta_sql_set_table_keys <- function(table.name=NULL,
                              table.prefix=table.prefix)
       
     }
-
+    
     
   } 
-
- 
+  
+  
   
   
   ## closing connection
   if(db.connection=="pool"){
     poolReturn(conn)
-    }
+  }
 }
 
