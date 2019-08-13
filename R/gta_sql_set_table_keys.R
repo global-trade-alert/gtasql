@@ -14,7 +14,7 @@ gta_sql_set_table_keys <- function(table.name=NULL,
                                    foreign.key=NULL,
                                    foreign.key.parent.table=NULL,
                                    foreign.key.parent.name=NULL,
-                                   foreign.key.del.cascade=T,
+                                   foreign.key.del.cascade=F,
                                    db.connection="pool",
                                    table.prefix=NULL) {
   
