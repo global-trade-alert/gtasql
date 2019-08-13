@@ -21,8 +21,9 @@ gta_sql_create_table <- function(write.df=NULL,
                                  create.foreign.key.parent=NULL,
                                  create.foreign.key.del.cascade=T,
                                  append.existing=T,
-                                 db.connection="pool",
-                                 table.prefix=NULL) {
+                                 table.prefix=NULL,
+                                 contains.data=T,
+                                 db.connection="pool") {
   
   if(is.null(write.df)){
     stop("No data frame provided for 'write.df'.")
@@ -60,10 +61,21 @@ gta_sql_create_table <- function(write.df=NULL,
                            db.connection="db.keys",
                            table.prefix=table.prefix)
     
-    gta_sql_create_table(write.df=write.df, append.existing=T,
-                         create.primary.key=NULL,
-                         create.foreign.key=NULL)
+    if(contains.data){
+      gta_sql_create_table(write.df=write.df, append.existing=T,
+                           create.primary.key=NULL,
+                           create.foreign.key=NULL)
+    } 
+
     poolReturn(db.keys)
+    
+  } else {
+    
+    if(! contains.data){
+      db.keys <<- poolCheckout(pool)
+      dbSendQuery(db.keys,paste("TRUNCATE TABLE ",sql.name, sep=""))
+      poolReturn(db.keys)
+    }
     
   }
   
