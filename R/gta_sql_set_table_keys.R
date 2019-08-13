@@ -12,7 +12,8 @@ gta_sql_set_table_keys <- function(table.name=NULL,
                                    primary.key=NULL,
                                    primary.auto.incr=F,
                                    foreign.key=NULL,
-                                   foreign.key.parent=NULL,
+                                   foreign.key.parent.table=NULL,
+                                   foreign.key.parent.name=NULL,
                                    foreign.key.del.cascade=T,
                                    db.connection="pool",
                                    table.prefix=NULL) {
@@ -104,8 +105,18 @@ gta_sql_set_table_keys <- function(table.name=NULL,
   if(is.null(foreign.key)==F){
     foreign.key=gta_r_to_sql_var(foreign.key,
                                  table.prefix="")
-    foreign.key.parent=gta_r_to_sql_var(foreign.key.parent,
+    
+    foreign.key.parent.table=gta_r_to_sql_var(foreign.key.parent.table,
                                         table.prefix="")
+    
+    if(!is.null(foreign.key.parent.name)){
+      foreign.key.parent.name=gta_r_to_sql_var(foreign.key.parent.name,
+                                   table.prefix="")
+      
+      fk.source=foreign.key.parent.name
+    } else {
+      fk.source=foreign.key
+    }
     
     for(i in 1:length(foreign.key)){
       
@@ -119,9 +130,9 @@ gta_sql_set_table_keys <- function(table.name=NULL,
       dbSendQuery(conn,query)
       
       if(foreign.key.del.cascade){
-        foreign.part=paste(" ADD FOREIGN KEY (",foreign.key[i],") REFERENCES ", foreign.key.parent[i],"(",foreign.key[i],") ON DELETE CASCADE", sep="")
+        foreign.part=paste(" ADD FOREIGN KEY (",foreign.key[i],") REFERENCES ", foreign.key.parent.table[i],"(",fk.source[i],") ON DELETE CASCADE", sep="")
       } else {
-        foreign.part=paste(" ADD FOREIGN KEY (",foreign.key[i],") REFERENCES ", foreign.key.parent[i],"(",foreign.key[i],") ON DELETE SET NULL", sep="")
+        foreign.part=paste(" ADD FOREIGN KEY (",foreign.key[i],") REFERENCES ", foreign.key.parent.table[i],"(",fk.source[i],") ON DELETE SET NULL", sep="")
       }
       
       
