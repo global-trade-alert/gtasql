@@ -28,7 +28,7 @@ gta_r_to_sql_var <- function(convert.var=NULL,
     if(length(table.prefix)>1){
       
       translated.vars=character()
-      for(i in length(convert.var)){
+      for(i in 1:length(convert.var)){
         
         if(is.na(table.prefix[i])){
           t.p=session.prefix
