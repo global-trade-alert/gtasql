@@ -23,18 +23,20 @@ gta_r_to_sql_var <- function(convert.var=NULL,
     
   } else {
     
-    if(nchar(table.prefix)>0 & stringr::str_detect(table.prefix, "_$", negate=T)){
-      stop("The table.prefix has to end with an underscore '_'.")
-    } else {
+    translated.vars=character()
+    for(i in length(convert.var)){
       
-      translated.vars=character()
-      for(i in length(convert.var)){
-        translated.vars=c(translated.vars, 
-                          paste(table.prefix[i],gsub("\\.","_",convert.var[i]),sep=""))
+      if(is.na(table.prefix[i])){
+        t.p=session.prefix
+      }else {
+        t.p=table.prefix[i]
       }
-      return(translated.vars)
       
+      translated.vars=c(translated.vars, 
+                        paste(t.p,gsub("\\.","_",convert.var[i]),sep=""))
+      rm(t.p)
     }
+    return(translated.vars)
     
     
   }
