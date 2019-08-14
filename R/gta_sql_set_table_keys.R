@@ -13,6 +13,7 @@ gta_sql_set_table_keys <- function(table.name=NULL,
                                    primary.auto.incr=F,
                                    foreign.key=NULL,
                                    foreign.key.parent.table=NULL,
+                                   foreign.key.parent.table.prefix=NULL,
                                    foreign.key.parent.name=NULL,
                                    foreign.key.del.cascade=F,
                                    db.connection="pool",
@@ -106,7 +107,7 @@ gta_sql_set_table_keys <- function(table.name=NULL,
                                  table.prefix="")
     
     foreign.key.parent.table=gta_r_to_sql_var(foreign.key.parent.table,
-                                              table.prefix=NULL)
+                                              table.prefix=foreign.key.parent.table.prefix)
     
     if(!is.null(foreign.key.parent.name)){
       foreign.key.parent.name=gta_r_to_sql_var(foreign.key.parent.name,
