@@ -19,11 +19,18 @@ gta_sql_get_value <- function(query=NULL,
     sought.value=dbGetQuery(conn.update, query)
     poolReturn(conn.update)
     
-    if(nrow(sought.value)==1 & ncol(sought.value)==1){
-      return(sought.value[1,1])
+    if(nrow(sought.value)==0){
+      
+      return(NA)
+      
     } else {
-      names(sought.value)=gsub("_","\\.",names(sought.value))
-      return(sought.value)
+      
+      if(nrow(sought.value)==1 & ncol(sought.value)==1){
+        return(sought.value[1,1])
+      } else {
+        names(sought.value)=gsub("_","\\.",names(sought.value))
+        return(sought.value)
+      }
     }
     
   } else {
