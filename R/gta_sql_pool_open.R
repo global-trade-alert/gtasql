@@ -21,7 +21,8 @@ gta_sql_pool_open <- function(db.title=NULL,
                               db.user=NULL,
                               db.password=NULL,
                               db.host=NULL,
-                              table.prefix=NULL) {
+                              table.prefix=NULL,
+                              got.keyring=T) {
   
   if(is.null(table.prefix)){
     stop("Please set the default table.prefix for this session (e.g. 'hs_').")
@@ -41,14 +42,23 @@ gta_sql_pool_open <- function(db.title=NULL,
   
   if(is.null(db.title)){
     
-    pool <<- pool::dbPool(
-      drv = RMySQL::MySQL(),
-      dbname = 'ricardodev',
-      host = "gta-ricardo-dev.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
-      username = keyring::key_list("ricardo-dev")[1,2],
-      password = keyring::key_get("ricardo-dev","gtaricardodev")
-    )
-    
+    if(got.keyring){
+      
+      pool <<- pool::dbPool(
+        drv = RMySQL::MySQL(),
+        dbname = 'ricardodev',
+        host = "gta-ricardo-dev.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
+        username = keyring::key_list("ricardo-dev")[1,2],
+        password = keyring::key_get("ricardo-dev","gtaricardodev")
+      )
+      
+      
+    } else {
+      
+      source("setup/keys/rdev.R")
+      
+    }
+
     
     
   } else {
