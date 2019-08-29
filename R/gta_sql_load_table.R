@@ -48,7 +48,7 @@ gta_sql_load_table <- function(load.table=NULL,
       
     }
     
-    column.type <- dbGetQuery(pool, paste("SELECT * FROM ",col.table," WHERE data_frame='",sql.table,"';", sep=""))
+    column.type <- dbGetQuery(pool, paste("SELECT * FROM ",col.table," WHERE data_frame='",load.table,"';", sep=""))
     sql.data <- dbGetQuery(pool, query)
   } else {
     stop("get the connection written up in source code")
