@@ -65,6 +65,22 @@ gta_sql_append_table <- function(append.table=NULL,
    
     
   } 
+  
+  ## inverting logical columns
+  col.types=sapply(sql.df, class)
+  
+  logi.cols=names(col.types)[col.types=="logical"]
+  
+  if(length(logi.cols)>0){
+    
+    for(l.col in logi.cols){
+      
+      eval(parse(text=paste("sql.df$",l.col,"=sql.df$",l.col,"==F",sep="")))
+      
+    }
+    
+  }
+  rm(col.types, logi.cols)
 
   dbWriteTable(conn = append.a.table, name = sql.table, value = sql.df, row.names=F, append=T)
 
