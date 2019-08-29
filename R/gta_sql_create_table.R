@@ -40,6 +40,22 @@ gta_sql_create_table <- function(write.df=NULL,
   sql.name=gta_r_to_sql_var(convert.var=write.df,
                             table.prefix=table.prefix)
   
+  ## inverting logical
+  col.types=sapply(sql.df, class)
+  
+  logi.cols=names(col.types)[col.types=="logical"]
+  
+  if(length(logi.cols)>0){
+    
+    for(l.col in logi.cols){
+      
+      eval(parse(text=paste("sql.df$",l.col,"=sql.df$",l.col,"==F",sep="")))
+      
+    }
+    
+  }
+  rm(col.types, logi.cols)
+  
   
   if(db.connection=="pool"){
     dbWriteTable(conn = pool, name = sql.name, value = sql.df, row.names=F, append=append.existing)
