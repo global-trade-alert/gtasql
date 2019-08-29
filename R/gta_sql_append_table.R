@@ -75,7 +75,7 @@ gta_sql_append_table <- function(append.table=NULL,
     
     for(l.col in logi.cols){
       
-      eval(parse(text=paste("sql.df$",l.col,"=sql.df$",l.col,"==F",sep="")))
+      eval(parse(text=paste("sql.df$",l.col,"=as.numeric(sql.df$",l.col,")",sep="")))
       
     }
     
@@ -83,7 +83,6 @@ gta_sql_append_table <- function(append.table=NULL,
   rm(col.types, logi.cols)
 
   dbWriteTable(conn = append.a.table, name = sql.table, value = sql.df, row.names=F, append=T)
-
   if(!is.null(get.id)){
     
     
