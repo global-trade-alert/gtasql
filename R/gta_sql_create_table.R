@@ -49,7 +49,7 @@ gta_sql_create_table <- function(write.df=NULL,
     
     for(l.col in logi.cols){
       
-      eval(parse(text=paste("sql.df$",l.col,"=sql.df$",l.col,"==F",sep="")))
+      eval(parse(text=paste("sql.df$",l.col,"=as.numeric(sql.df$",l.col,")",sep="")))
       
     }
     
