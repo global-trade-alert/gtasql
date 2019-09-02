@@ -8,7 +8,7 @@
 #' @author Global Trade Alert
 
 
-gta_sql_append_table <- function() {
+gta_sql_kill_connections <- function() {
   ## taken from https://stackoverflow.com/users/2610541/thankgoat at https://stackoverflow.com/questions/32139596
   library(RMySQL)
   
