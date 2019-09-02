@@ -2,7 +2,7 @@
 
 #' Kill all open connections to a remote database.
 #'
-#' Out they go
+#' Out they go.
 
 #' @references www.globaltradealert.org
 #' @author Global Trade Alert

@@ -21,7 +21,13 @@ gta_sql_get_value <- function(query=NULL,
     
     if(nrow(sought.value)==0){
       
-      return(NA)
+      if(ncol(sought.value)==1){
+        return(NA)
+      } else {
+        names(sought.value)=gsub("_","\\.",names(sought.value))
+        return(sought.value)
+      }
+      
       
     } else {
       
