@@ -8,18 +8,25 @@
 #' @author Global Trade Alert
 
 
-gta_sql_kill_connections <- function() {
-  ## taken from https://stackoverflow.com/users/2610541/thankgoat at https://stackoverflow.com/questions/32139596
+gta_sql_kill_connections <- function(keep.x.first.connections=NULL) {
+  ## baed on https://stackoverflow.com/users/2610541/thankgoat at https://stackoverflow.com/questions/32139596
   library(RMySQL)
   
   all_cons <- dbListConnections(MySQL())
   
-  print(all_cons)
   
-  for(con in all_cons)
-    +  dbDisconnect(con)
+  if(is.null(keep.x.first.connections)){
+    for(con in all_cons)
+      +  dbDisconnect(con)
+    
+  } else {
+    for(i in keep.x.first.connections:length(all_cons)){
+      
+      dbDisconnect(dbListConnections(MySQL())[[i]])
+      
+    }
+  }
   
-  print(paste(length(all_cons), " connections killed."))
   
   
 }
