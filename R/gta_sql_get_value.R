@@ -11,7 +11,10 @@
 #' @author Global Trade Alert
 
 gta_sql_get_value <- function(query=NULL,
-                              db.connection="pool") {
+                              db.connection="pool",
+                              leak.proof=T) {
+  
+  nr.connections.start=gta_sql_count_connections()
 
    if(db.connection=="pool"){
     
@@ -22,27 +25,36 @@ gta_sql_get_value <- function(query=NULL,
     if(nrow(sought.value)==0){
       
       if(ncol(sought.value)==1){
-        return(NA)
+        my.value=NA
       } else {
         names(sought.value)=gsub("_","\\.",names(sought.value))
-        return(sought.value)
+        my.value=sought.value
       }
       
       
     } else {
       
       if(nrow(sought.value)==1 & ncol(sought.value)==1){
-        return(sought.value[1,1])
+        my.value=sought.value[1,1]
       } else if (ncol(sought.value)==1){
-        return(as.vector(sought.value[,1]))
+        my.value=as.vector(sought.value[,1])
       } else {
         names(sought.value)=gsub("_","\\.",names(sought.value))
-        return(sought.value)
+        my.value=sought.value
       }
     }
     
   } else {
+    if(leak.proof){
+      gta_sql_kill_connections(nr.connections.start)
+    }
     stop("get the connection written up in source code")
   }
+  
+  if(leak.proof){
+    gta_sql_kill_connections(nr.connections.start)
+  }
+  
+  return(my.value)
 }
 

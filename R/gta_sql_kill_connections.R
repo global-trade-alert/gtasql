@@ -20,11 +20,17 @@ gta_sql_kill_connections <- function(keep.x.first.connections=NULL) {
       +  dbDisconnect(con)
     
   } else {
-    for(i in keep.x.first.connections:length(all_cons)){
+    
+    if(length(all_cons)>keep.x.first.connections){
       
-      dbDisconnect(dbListConnections(MySQL())[[i]])
+      for(i in (keep.x.first.connections+1):length(all_cons)){
+        
+        dbDisconnect(dbListConnections(MySQL())[[i]])
+        
+      }
       
     }
+
   }
   
   

@@ -11,7 +11,10 @@
 #' @author Global Trade Alert
 
 gta_sql_update_table <- function(query=NULL,
-                                 db.connection="pool") {
+                                 db.connection="pool",
+                                 leak.proof=T) {
+  
+  nr.connections.start=gta_sql_count_connections()
 
    if(db.connection=="pool"){
     
@@ -21,6 +24,10 @@ gta_sql_update_table <- function(query=NULL,
     
   } else {
     stop("get the connection written up in source code")
+  }
+  
+  if(leak.proof){
+    gta_sql_kill_connections(nr.connections.start)
   }
 }
 
