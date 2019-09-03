@@ -10,10 +10,9 @@
 
 gta_sql_load_table <- function(load.table=NULL,
                                table.prefix=NULL,
-                               db.connection="pool",
-                               leak.proof=T) {
+                               db.connection="pool"){
   
-  nr.connections.start=gta_sql_count_connections()
+
   
   
   
@@ -122,12 +121,7 @@ gta_sql_load_table <- function(load.table=NULL,
     }
     rm(change.cols, change.it)
   }
-  
-  
-  if(leak.proof){
-    gta_sql_kill_connections(nr.connections.start)
-  }
-  
+
   
   ## adjusting table names
   names(sql.data)=gsub("_","\\.",names(sql.data))

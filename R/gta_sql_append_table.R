@@ -16,10 +16,7 @@ gta_sql_append_table <- function(append.table=NULL,
                                  append.by.df=NULL,
                                  table.prefix=NULL,
                                  get.id=NULL,
-                                 db.connection="pool",
-                                 leak.proof=T) {
-  
-  nr.connections.start=gta_sql_count_connections()
+                                 db.connection="pool") {
   
   ## importing what you want to send
   eval(parse(text=paste("sql.df=",append.by.df,sep="")))
@@ -109,8 +106,5 @@ gta_sql_append_table <- function(append.table=NULL,
     poolReturn(append.a.table)
   } 
   
-  if(leak.proof){
-    gta_sql_kill_connections(nr.connections.start)
-  }
 }
 
