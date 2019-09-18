@@ -49,7 +49,8 @@ gta_sql_pool_open <- function(db.title=NULL,
         dbname = 'ricardodev',
         host = "gta-ricardo-dev.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
         username = keyring::key_list("ricardo-dev")[1,2],
-        password = keyring::key_get("ricardo-dev","gtaricardodev")
+        password = keyring::key_get("ricardo-dev","gtaricardodev"),
+        idleTimeout = 3
       )
       
       
@@ -71,9 +72,9 @@ gta_sql_pool_open <- function(db.title=NULL,
         pool <<- pool::dbPool(
           drv = RMySQL::MySQL(),
           dbname = 'ricardo',
-          host = "gta-ricardo-maria.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
-          username = keyring::key_list("ricardo-aws")[1,2],
-          password = keyring::key_get("ricardo-aws","gtaricardomaster")
+          host = "gta-ricardo-main.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
+          username = keyring::key_list("ricardo-main")[1,2],
+          password = keyring::key_get("ricardo-main","gtaricardomaster")
         )
         
         
