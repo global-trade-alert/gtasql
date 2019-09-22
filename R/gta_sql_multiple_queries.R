@@ -16,6 +16,7 @@ gta_sql_multiple_queries=function(query.string, output.queries, db.connection='p
   
   queries=gsub('\n',' ',unlist(strsplit(query.string,';')))
   queries=queries[str_trim(queries)!='']
+  queries=gsub("/\\*.*/\\**", "", queries)
   
   if(!is.character(query.string)){stop('The query must be provided as a string')}
   if (!all(output.queries %in% 1:length(queries) | is.na(output.queries))){stop('The desired output is not in bounds of the queries provided')}
