@@ -31,8 +31,9 @@ gta_sql_create_table <- function(write.df=NULL,
     stop("No data frame provided for 'write.df'.")
   }
   
+  if(!is.data.frame(append.by.df)) stop('The provided append.by.df is not a dataframe!')
   
-  eval(parse(text=paste("sql.df=",write.df,sep="")))
+  sql.df=append.by.df
   names(sql.df)=gsub('\\.','_',names(sql.df))
   sql.df=as.data.frame(sql.df)
   
