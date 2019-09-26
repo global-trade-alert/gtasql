@@ -26,13 +26,19 @@ gta_sql_multiple_queries=function(query.string, output.queries, db.connection='p
   if (length(output.queries)>1){output=list()}
   
   for(i in 1:length(queries)){
-    if(show.time){t=Sys.time()}
+    if(show.time){
+      t=Sys.time()
+      print("______________________________________________________")
+      print(paste("Began query",i,"of",length(queries)))
+      print(paste("Starts with ", substr(queries[i],1,100),"...",sep=""))
+      }
     result=gta_sql_get_value(query=paste0(queries[i],';'),db.connection = db.connection)
     
     if(show.time){
-      print(paste("Finished query",i,"of",length(queries)))
-      print(Sys.time()-t)
-      print(paste("Starts with ", substr(queries[i],1,100),"...",sep=""))
+      
+      print(paste("Finished query",i))
+      print(round(Sys.time()-t,2))
+      print("______________________________________________________")
     }
     
     if (length(output.queries)>1 & i %in% output.queries){
