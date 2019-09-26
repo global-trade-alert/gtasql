@@ -7,11 +7,12 @@
 #' @param query.string Specify the input query
 #' @param output.queries Specify in a vector, which queries contain outputs to be extracted, i.e. c(1,5) will return the results from queries 1 and 5.
 #' @param db.connection Specify the database connection you want to use. Default is 'pool'.
+#' @param show.time Show execution duration per query.
 #'
 #' @references www.globaltradealert.org
 #' @author Global Trade Alert
 
-gta_sql_multiple_queries=function(query.string, output.queries, db.connection='pool'){
+gta_sql_multiple_queries=function(query.string, output.queries, db.connection='pool', show.time=F){
   library(stringr)
   
   queries=gsub('\n',' ',unlist(strsplit(query.string,';')))
@@ -25,7 +26,14 @@ gta_sql_multiple_queries=function(query.string, output.queries, db.connection='p
   if (length(output.queries)>1){output=list()}
   
   for(i in 1:length(queries)){
+    if(show.time){t=Sys.time()}
     result=gta_sql_get_value(query=paste0(queries[i],';'),db.connection = db.connection)
+    
+    if(show.time){
+      print(paste("Finished query",i,"of",length(queries)))
+      print(Sys.time()-t)
+      print(paste("Starts with ", substr(queries[i],1,100),"...",sep=""))
+    }
     
     if (length(output.queries)>1 & i %in% output.queries){
       output[[length(output)+1]]=result
