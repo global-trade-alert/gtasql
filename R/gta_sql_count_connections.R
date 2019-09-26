@@ -9,7 +9,7 @@
 
 
 gta_sql_count_connections <- function() {
-  ## taken from https://stackoverflow.com/users/2610541/thankgoat at https://stackoverflow.com/questions/32139596
+  ## based on https://stackoverflow.com/users/2610541/thankgoat at https://stackoverflow.com/questions/32139596
   library(RMySQL)
   
   all_cons <- dbListConnections(MySQL())

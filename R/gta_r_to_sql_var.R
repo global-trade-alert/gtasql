@@ -13,7 +13,7 @@
 
 gta_r_to_sql_var <- function(convert.var=NULL,
                              table.prefix=NULL) {
-  
+
   if(is.null(convert.var)){
     stop("No variables provided for 'convert.var'.")
   }
