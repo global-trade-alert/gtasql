@@ -15,9 +15,10 @@ gta_sql_get_value <- function(query=NULL,
   
    if(db.connection=="pool"){
     
-    conn.update=poolCheckout(pool)
-    sought.value=dbGetQuery(conn.update, query)
-    poolReturn(conn.update)
+    conn.get.value=poolCheckout(pool)
+    sought.value=dbGetQuery(conn.get.value, query)
+    poolReturn(conn.get.value)
+    rm(conn.get.value)
     
     if(nrow(sought.value)==0){
       
@@ -42,9 +43,6 @@ gta_sql_get_value <- function(query=NULL,
     }
     
   } else {
-    if(leak.proof){
-      gta_sql_kill_connections(nr.connections.start)
-    }
     stop("get the connection written up in source code")
   }
   
