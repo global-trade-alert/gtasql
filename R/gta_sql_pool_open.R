@@ -41,7 +41,7 @@ gta_sql_pool_open <- function(db.title=NULL,
   
   if(is.null(db.title)){
     
-    db.keys=gta_pwd("ricardodev")
+    db.keys<<-gta_pwd("ricardodev")
     
     pool <<- pool::dbPool(
       drv = RMySQL::MySQL(),
@@ -59,7 +59,7 @@ gta_sql_pool_open <- function(db.title=NULL,
     if(db.title=="ricardo"){
       
       
-      db.keys=gta_pwd("ricardomain")
+      db.keys<<-gta_pwd("ricardomain")
       
       pool <<- pool::dbPool(
         drv = RMySQL::MySQL(),
