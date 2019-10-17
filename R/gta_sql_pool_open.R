@@ -21,8 +21,7 @@ gta_sql_pool_open <- function(db.title=NULL,
                               db.user=NULL,
                               db.password=NULL,
                               db.host=NULL,
-                              table.prefix=NULL,
-                              got.keyring=T) {
+                              table.prefix=NULL) {
   
   if(is.null(table.prefix)){
     stop("Please set the default table.prefix for this session (e.g. 'hs_').")
@@ -42,23 +41,16 @@ gta_sql_pool_open <- function(db.title=NULL,
   
   if(is.null(db.title)){
     
-    if(got.keyring){
-      
-      pool <<- pool::dbPool(
-        drv = RMySQL::MySQL(),
-        dbname = 'ricardodev',
-        host = "gta-ricardo-dev.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
-        username = keyring::key_list("ricardo-dev")[1,2],
-        password = keyring::key_get("ricardo-dev","gtaricardodev"),
-        idleTimeout = 3
-      )
-      
-      
-    } else {
-      
-      source("setup/keys/rdev.R")
-      
-    }
+    db.keys=gta_pwd("ricardodev")
+    
+    pool <<- pool::dbPool(
+      drv = RMySQL::MySQL(),
+      dbname = 'ricardodev',
+      host = "gta-ricardo-dev.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
+      username = db.keys$name,
+      password = db.keys$password,
+      idleTimeout = 3
+    )
 
     
     
@@ -67,22 +59,15 @@ gta_sql_pool_open <- function(db.title=NULL,
     if(db.title=="ricardo"){
       
       
-      if(got.keyring){
-        
-        pool <<- pool::dbPool(
-          drv = RMySQL::MySQL(),
-          dbname = 'ricardo',
-          host = "gta-ricardo-main.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
-          username = keyring::key_list("ricardo-main")[1,2],
-          password = keyring::key_get("ricardo-main","gtaricardomaster")
-        )
-        
-        
-      } else {
-        
-        source("setup/keys/ric.R")
-        
-      }
+      db.keys=gta_pwd("ricardomain")
+      
+      pool <<- pool::dbPool(
+        drv = RMySQL::MySQL(),
+        dbname = 'ricardo',
+        host = "gta-ricardo-main.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
+        username = db.keys$name,
+        password = db.keys$password
+      )
 
       
     }
