@@ -19,6 +19,8 @@ gta_sql_update_table <- function(query=NULL,
     conn.update=poolCheckout(pool)
     dbSendQuery(conn.update, query)
     poolReturn(conn.update)
+    rm(conn.update)
+    
     
   } else {
     stop("get the connection written up in source code")
