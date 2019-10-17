@@ -47,7 +47,7 @@ gta_sql_pool_open <- function(db.title=NULL,
       drv = RMySQL::MySQL(),
       dbname = 'ricardodev',
       host = "gta-ricardo-dev.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
-      username = db.keys$name,
+      username = db.keys$user,
       password = db.keys$password,
       idleTimeout = 3
     )
@@ -65,7 +65,7 @@ gta_sql_pool_open <- function(db.title=NULL,
         drv = RMySQL::MySQL(),
         dbname = 'ricardo',
         host = "gta-ricardo-main.cp7esvs8xwum.eu-west-1.rds.amazonaws.com",
-        username = db.keys$name,
+        username = db.keys$user,
         password = db.keys$password
       )
 
