@@ -75,29 +75,35 @@ gta_sql_pool_open <- function(db.title=NULL,
       
     }
     
-    if(is.null(db.name)){
-      
-      pool <<- pool::dbPool(
-        drv = RMySQL::MySQL(),
-        host = db.host,
-        username = db.user,
-        password = db.password
-      )
-
-    } else {
-      
-      pool <<- pool::dbPool(
-        drv = RMySQL::MySQL(),
-        host = db.host,
-        username = db.user,
-        password = db.password,
-        dbname=db.name
-      )
-    
-    }
-    
     
   }
+  
+  if(is.null(db.name)){
+    
+    pool <<- pool::dbPool(
+      drv = RMySQL::MySQL(),
+      host = db.host,
+      username = db.user,
+      password = db.password
+    )
+    
+  } else {
+    
+    pool <<- pool::dbPool(
+      drv = RMySQL::MySQL(),
+      host = db.host,
+      username = db.user,
+      password = db.password,
+      dbname=db.name
+    )
+    
+  }
+  
+
+  assign("pool", pool, envir = .GlobalEnv)
+  
+  
+  
 }
 
 
