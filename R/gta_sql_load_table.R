@@ -3,6 +3,8 @@
 #' Load a table from the SQL database into your local environment.
 #'
 #' @param load.table The name of the table you want to load. SQL or GTA naming is fine.
+#' @param table.prefix Specify the sql-db prefix for the table.
+#' @param condition.sql Add SQL code to the default query ('SELECT * FROM table') e.g. "WHERE x = y". No need to add a semicolon at the end. 
 #' @param db.connection Specify the database connection you want to use. Default is 'pool'.
 #'
 #' @references www.globaltradealert.org
@@ -10,6 +12,7 @@
 
 gta_sql_load_table <- function(load.table=NULL,
                                table.prefix=NULL,
+                               condition.sql=NULL,
                                db.connection="pool"){
   
 
@@ -26,7 +29,15 @@ gta_sql_load_table <- function(load.table=NULL,
                              table.prefix=table.prefix)
   
   # Construct the fetching query
-  sql <- paste("SELECT * FROM", sql.table)
+  
+  if(is.null(condition.sql)){
+     
+    sql <- paste("SELECT * FROM", sql.table)
+    
+  } else{
+    sql <- paste0("SELECT * FROM ", sql.table," ", condition.sql, ";")
+  }
+  
   query <- sqlInterpolate(pool, sql)
   
   ## flexible version for later
