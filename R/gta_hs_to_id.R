@@ -71,8 +71,13 @@ gta_hs_to_id=function(hs.codes=NULL,
   
   insert.query=paste('INSERT INTO gta_affected_tariff_line (intervention_id,tariff_line_code,tariff_line_code_4,prior_level,new_level,tariff_peak,is_positively_affected,is_tariff_line_official,inception_date,removal_date,unit)',
                      'SELECT * FROM gta_up_tar;')
-  gta_sql_get_value(insert.query)
-  gta_sql_get_value('DROP TABLE gta_up_tar;')
+  gta_sql_get_value(insert.query, db.connection = db.connection)
+  gta_sql_get_value('DROP TABLE gta_up_tar;', db.connection = db.connection)
   
+  #set interventions to recalculate
+  recalc.query = paste0('UPDATE gta_intervention SET gta_intervention.to_recalculate = 1 WHERE gta_intervention.id = ',intervention.id,';', db.connection = db.connection)
+  # set state act 105 to.recalculate to 1
+  gta_sql_get_value('UPDATE gta_intervention SET gta_intervention.to_recalculate = 1 WHERE gta_intervention.measure_id = 105;', db.connection = db.connection)
+  gta_sql_get_value(recalc.query)
 }
 
