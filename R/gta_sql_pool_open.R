@@ -81,7 +81,7 @@ gta_sql_pool_open <- function(db.title=NULL,
   if(is.null(db.name)){
     
     pool <<- pool::dbPool(
-      drv = RMySQL::MySQL(),
+      drv = RMySQL::MySQL(max.con = 1000),
       host = db.host,
       username = db.user,
       password = db.password
@@ -90,7 +90,7 @@ gta_sql_pool_open <- function(db.title=NULL,
   } else {
     
     pool <<- pool::dbPool(
-      drv = RMySQL::MySQL(),
+      drv = RMySQL::MySQL(max.con = 1000),
       host = db.host,
       username = db.user,
       password = db.password,
