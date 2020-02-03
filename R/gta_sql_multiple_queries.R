@@ -12,7 +12,7 @@
 #' @references www.globaltradealert.org
 #' @author Global Trade Alert
 
-gta_sql_multiple_queries=function(query.string, output.queries, db.connection='pool', show.time=F){
+gta_sql_multiple_queries=function(query.string, output.queries, db.connection=db.connection, show.time=F){
   library(stringr)
   
   queries=gsub('\n',' ',unlist(strsplit(query.string,';')))
