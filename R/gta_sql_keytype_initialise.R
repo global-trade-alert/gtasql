@@ -36,13 +36,12 @@ gta_sql_keytype_initialise <- function(db.connection="pool",
   
   
   ## loading table
-  if(db.connection=="pool"){
-    db.init.key <<- poolCheckout(pool)
-    dbSendQuery(db.init.key,init.query)
-    poolReturn(db.init.key)
- 
-  } else {
-    stop("get the connection written up in source code")
-  }
+  
+  eval(parse(text=paste0("db.init.key=poolCheckout(",db.connection,")"))) 
+  
+  dbSendQuery(db.init.key,init.query)
+  poolReturn(db.init.key)
+  
+
 }
 
