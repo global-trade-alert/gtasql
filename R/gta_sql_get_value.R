@@ -13,9 +13,10 @@
 gta_sql_get_value <- function(query=NULL,
                               db.connection="pool") {
   
-   if(db.connection=="pool"){
     
-    conn.get.value=poolCheckout(pool)
+    eval(parse(text=paste0("conn.get.value=poolCheckout(",db.connection,")")))
+    
+    
     sought.value=dbGetQuery(conn.get.value, query)
     poolReturn(conn.get.value)
     rm(conn.get.value)
@@ -41,10 +42,7 @@ gta_sql_get_value <- function(query=NULL,
         my.value=sought.value
       }
     }
-    
-  } else {
-    stop("get the connection written up in source code")
-  }
+
   
   return(my.value)
 }
