@@ -34,13 +34,10 @@ gta_sql_coltype_initialise <- function(db.connection="pool",
 );", sep="")
   
   ## loading table
-  if(db.connection=="pool"){
-    db.init <<- poolCheckout(pool)
-    dbSendQuery(db.init,init.query)
-    poolReturn(db.init)
-
-  } else {
-    stop("get the connection written up in source code")
-  }
+  eval(parse(text=paste0("db.init=poolCheckout(",db.connection,")")))
+  
+  dbSendQuery(db.init,init.query)
+  poolReturn(db.init)
+  
 }
 
