@@ -20,13 +20,8 @@ gta_sql_set_table_keys <- function(table.name=NULL,
                                    table.prefix=NULL) {
   
 
-  
-  if(db.connection=="pool"){
-    eval(parse(text=paste("conn=poolCheckout(",db.connection,")",sep="")))
-  } else {
-    eval(parse(text=paste("conn=",db.connection,"",sep="")))
-  }
-  
+  eval(parse(text=paste0("conn=poolCheckout(",db.connection,")")))
+
   
   # ALTER TABLE Orders
   # ADD PRIMARY KEY (OrderID)
