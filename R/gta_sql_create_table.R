@@ -57,11 +57,7 @@ gta_sql_create_table <- function(write.df=NULL,
   rm(col.types, logi.cols)
   
   
-  if(db.connection=="pool"){
-    dbWriteTable(conn = pool, name = sql.name, value = sql.df, row.names=F, append=append.existing)
-  } else {
-    stop("get the connection written up in source code")
-  }
+  eval(parse(text=paste0("dbWriteTable(conn = ",db.connection,", name = sql.name, value = sql.df, row.names=F, append=append.existing)")))
   
   ## column types: Storing
   gta_sql_coltype_record(write.df)
@@ -87,8 +83,8 @@ gta_sql_create_table <- function(write.df=NULL,
   
   
   if((is.null(create.primary.key)==F | is.null(create.foreign.key)==F)){
+    eval(parse(text=paste0("db.keys=poolCheckout(",db.connection,")"))) 
     
-    db.keys <<- poolCheckout(pool)
     dbSendQuery(db.keys,paste("TRUNCATE TABLE ",sql.name, sep=""))
     
     gta_sql_set_table_keys(table.name=write.df,
@@ -113,7 +109,7 @@ gta_sql_create_table <- function(write.df=NULL,
   } else {
     
     if(! contains.data){
-      db.keys <<- poolCheckout(pool)
+      eval(parse(text=paste0("db.keys=poolCheckout(",db.connection,")"))) 
       dbSendQuery(db.keys,paste("TRUNCATE TABLE ",sql.name, sep=""))
       poolReturn(db.keys)
     }
