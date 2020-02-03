@@ -38,7 +38,7 @@ gta_sql_load_table <- function(load.table=NULL,
     sql <- paste0("SELECT * FROM ", sql.table," ", condition.sql, ";")
   }
   
-  query <- sqlInterpolate(pool, sql)
+  eval(parse(text=paste0("query <- sqlInterpolate(",db.connection,", sql)")))
   
   ## flexible version for later
   # sql <- "SELECT * FROM City WHERE ID = ?id1 OR ID = ?id2 OR ID = ?id3;"
@@ -46,28 +46,27 @@ gta_sql_load_table <- function(load.table=NULL,
   #                         id2 = input$ID2, id3 = input$ID3)
 
   ## loading table
-  if(db.connection=="pool"){
+  
+  
+  if(is.null(table.prefix)){
     
-    if(is.null(table.prefix)){
-      
-      col.table=paste(session.prefix,"r_column_type",sep="")
-      
-    } else{
-      
-      if(nchar(table.prefix)>0 & stringr::str_detect(table.prefix, "_$", negate=T)){
-        stop("The table.prefix has to end with an underscore '_'.")
-      }
-      
-      col.table=paste(table.prefix,"r_column_type",sep="")
-      
+    col.table=paste(session.prefix,"r_column_type",sep="")
+    
+  } else{
+    
+    if(nchar(table.prefix)>0 & stringr::str_detect(table.prefix, "_$", negate=T)){
+      stop("The table.prefix has to end with an underscore '_'.")
     }
     
-    column.type <- dbGetQuery(pool, paste("SELECT * FROM ",col.table," WHERE data_frame='",gsub("\\.","_",load.table),"';", sep=""))
-    sql.data <- dbGetQuery(pool, query)
-  } else {
-    stop("get the connection written up in source code")
+    col.table=paste(table.prefix,"r_column_type",sep="")
+    
   }
   
+  col.type.query=paste("SELECT * FROM ",col.table," WHERE data_frame='",gsub("\\.","_",load.table),"';", sep="")
+  
+  eval(parse(text=paste0("column.type <- dbGetQuery(",db.connection,", col.type.query)")))
+  eval(parse(text=paste0("sql.data <- dbGetQuery(",db.connection,", query)")))
+
   
   ## checking column.types
   
