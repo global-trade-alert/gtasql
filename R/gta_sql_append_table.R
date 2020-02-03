@@ -28,12 +28,8 @@ gta_sql_append_table <- function(append.table=NULL,
   
   
   ## checking whether there is an auto-incrementing primary key in the table
-  if(db.connection=="pool"){
-    append.a.table=poolCheckout(pool)
-
-  } else {
-    append.a.table=db.connection
-  }
+  
+  eval(parse(text=paste0("append.a.table=poolCheckout(",db.connection,")")))
   
   
   if(is.null(table.prefix)){
