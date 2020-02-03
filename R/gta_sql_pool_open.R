@@ -16,7 +16,8 @@
 #' @author Global Trade Alert
 
 
-gta_sql_pool_open <- function(db.title=NULL,
+gta_sql_pool_open <- function(pool.name="pool",
+                              db.title=NULL,
                               db.name=NULL,
                               db.user=NULL,
                               db.password=NULL,
@@ -80,34 +81,34 @@ gta_sql_pool_open <- function(db.title=NULL,
   
   if(is.null(db.name)){
     
-    pool <<- pool::dbPool(
+    eval(parse(text=paste0(pool.name," <<- pool::dbPool(
       drv = RMySQL::MySQL(max.con = 1000),
       host = db.host,
       username = db.user,
       password = db.password
-    )
+    )")))
     
   } else {
     
-    pool <<- pool::dbPool(
+    eval(parse(text=paste0(pool.name," <<- pool::dbPool(
       drv = RMySQL::MySQL(max.con = 1000),
       host = db.host,
       username = db.user,
       password = db.password,
       dbname=db.name
-    )
+    )")))
     
   }
   
 
-  assign("pool", pool, envir = .GlobalEnv)
+  eval(parse(text=paste0("assign('",pool.name,"', ",pool.name,", envir = .GlobalEnv)")))
   
   
   
 }
 
 
-gta_sql_pool_close <- function(){
-  poolClose(pool)
+gta_sql_pool_close <- function(pool.name="pool"){
+  eval(parse(text=paste0("poolClose(",pool.name,")")))
 }
 
