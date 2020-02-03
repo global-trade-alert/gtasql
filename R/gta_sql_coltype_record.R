@@ -41,16 +41,12 @@ gta_sql_coltype_record <- function(record.frame=NULL,
   
   
   ## loading table
-  if(db.connection=="pool"){
-    db.ct <<- poolCheckout(pool)
-    dbSendQuery(db.ct,del.query)
-    
-    dbWriteTable(conn = db.ct, name = col.table, value = r.column.type, row.names=F, append=T)
-    
-    poolReturn(db.ct)
-    
-  } else {
-    stop("get the connection written up in source code")
-  }
+  eval(parse(text=paste0("db.ct=poolCheckout(",db.connection,")"))) 
+  
+  dbSendQuery(db.ct,del.query)
+  
+  dbWriteTable(conn = db.ct, name = col.table, value = r.column.type, row.names=F, append=T)
+  
+  poolReturn(db.ct)
 }
 
