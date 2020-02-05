@@ -95,7 +95,7 @@ gta_sql_create_table <- function(write.df=NULL,
                            foreign.key.parent.table.prefix=foreign.key.parent.table.prefix,
                            foreign.key.parent.name=foreign.key.parent.name,
                            foreign.key.del.cascade=create.foreign.key.del.cascade,
-                           db.connection="db.keys",
+                           db.connection=db.connection,
                            table.prefix=table.prefix)
     
     if(contains.data){
