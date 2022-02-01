@@ -81,8 +81,16 @@ gta_sql_pool_open <- function(pool.name="pool",
   
   if(is.null(db.name)){
     
+    # eval(parse(text=paste0(pool.name," <<- pool::dbPool(
+    #   drv = RMySQL::MySQL(max.con = 1000),
+    #   host = db.host,
+    #   username = db.user,
+    #   password = db.password
+    # )")))
+    
+    #updating drv as RMySQL is bad with encoding
     eval(parse(text=paste0(pool.name," <<- pool::dbPool(
-      drv = RMySQL::MySQL(max.con = 1000),
+      drv = RMariaDB::MariaDB(),
       host = db.host,
       username = db.user,
       password = db.password
@@ -91,7 +99,7 @@ gta_sql_pool_open <- function(pool.name="pool",
   } else {
     
     eval(parse(text=paste0(pool.name," <<- pool::dbPool(
-      drv = RMySQL::MySQL(max.con = 1000),
+      drv = RMariaDB::MariaDB(),
       host = db.host,
       username = db.user,
       password = db.password,
