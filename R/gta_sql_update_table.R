@@ -17,7 +17,7 @@ gta_sql_update_table <- function(query=NULL,
   
   eval(parse(text=paste0("conn.update=poolCheckout(",db.connection,")"))) 
 
-  res = fetch(dbSendQuery(conn.update, query))
+  res = dbFetch(dbSendQuery(conn.update, query))
   poolReturn(conn.update)
   rm(conn.update)
   
