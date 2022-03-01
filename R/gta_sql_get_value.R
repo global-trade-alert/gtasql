@@ -13,9 +13,6 @@
 gta_sql_get_value <- function(query=NULL,
                               db.connection="pool") {
   
-    # cheap fix for recent insert commit issues
-    gta_sql_get_value("select 1;", db.connection = db.connection)  
-  
     eval(parse(text=paste0("conn.get.value=poolCheckout(",db.connection,")")))
     
     
@@ -45,9 +42,6 @@ gta_sql_get_value <- function(query=NULL,
       }
     }
 
-  # cheap fix for recent insert commit issues
-  gta_sql_get_value("select 1;", db.connection = db.connection)  
-    
   return(my.value)
 }
 
