@@ -13,13 +13,17 @@
 gta_sql_update_table <- function(query=NULL,
                                  db.connection="pool") {
   
-  
+  # cheap fix for recent insert commit issues
+  gta_sql_update_table("select 1;", db.connection = db.connection)
   
   eval(parse(text=paste0("conn.update=poolCheckout(",db.connection,")"))) 
 
   res = dbFetch(dbSendQuery(conn.update, query))
   poolReturn(conn.update)
   rm(conn.update)
+  
+  # cheap fix for recent insert commit issues
+  gta_sql_update_table("select 1;", db.connection = db.connection)
   
   if(nrow(res)>0) return(res);
 
