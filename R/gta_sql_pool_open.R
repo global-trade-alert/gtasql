@@ -81,35 +81,25 @@ gta_sql_pool_open <- function(pool.name="pool",
   
   if(is.null(db.name)){
     
-    eval(parse(text=paste0(pool.name," <<- pool::dbPool(
-      drv = RMySQL::MySQL(max.con = 1000),
-      host = db.host,
-      username = db.user,
-      password = db.password
-    )")))
-    
-    # code with RMariaDB as driver. This will have to be implemented at some point.
-    # please contact CC for why this will be necessary.
     # eval(parse(text=paste0(pool.name," <<- pool::dbPool(
-    #   drv = RMariaDB::MariaDB(),
+    #   drv = RMySQL::MySQL(max.con = 1000),
     #   host = db.host,
     #   username = db.user,
     #   password = db.password
     # )")))
     
+    #updating drv as RMySQL is bad with encoding
+    eval(parse(text=paste0(pool.name," <<- pool::dbPool(
+      drv = RMariaDB::MariaDB(),
+      host = db.host,
+      username = db.user,
+      password = db.password
+    )")))
+    
   } else {
     
-    # eval(parse(text=paste0(pool.name," <<- pool::dbPool(
-    #   drv = RMariaDB::MariaDB(),
-    #   host = db.host,
-    #   username = db.user,
-    #   password = db.password,
-    #   dbname=db.name
-    # )")))
-    
-    
     eval(parse(text=paste0(pool.name," <<- pool::dbPool(
-      drv = RMySQL::MySQL(max.con = 1000),
+      drv = RMariaDB::MariaDB(),
       host = db.host,
       username = db.user,
       password = db.password,
