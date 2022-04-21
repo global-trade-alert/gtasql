@@ -93,7 +93,8 @@ gta_sql_pool_open <- function(pool.name="pool",
       drv = RMariaDB::MariaDB(),
       host = db.host,
       username = db.user,
-      password = db.password
+      password = db.password,
+      encoding='UTF-8'
     )")))
     
   } else {
@@ -103,7 +104,8 @@ gta_sql_pool_open <- function(pool.name="pool",
       host = db.host,
       username = db.user,
       password = db.password,
-      dbname=db.name
+      dbname=db.name,
+      encoding='UTF-8'
     )")))
     
   }
